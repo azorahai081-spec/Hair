@@ -140,10 +140,11 @@ try {
                 <div class="rounded-lg shadow-2xl">
                     <div class="swiper">
                         <div class="swiper-wrapper">
-                            <!-- Slides -->
-                            <div class="swiper-slide"><img src="https://i.ibb.co/68v8z9J/image.png" alt="Hair growth result 1" class="w-full rounded-xl"></div>
-                            <div class="swiper-slide"><img src="https://i.ibb.co/3k8gT5r/image.png" alt="Hair growth result 2" class="w-full rounded-xl"></div>
-                            <div class="swiper-slide"><img src="https://placehold.co/800x800/cccccc/ffffff?text=Result+3" alt="Hair growth result 3" class="w-full rounded-xl"></div>
+                            <!-- Slides - UPDATED with local images -->
+                            <div class="swiper-slide"><img src="FEG-1-1.jpg" alt="Hair growth result 1" class="w-full rounded-xl"></div>
+                            <div class="swiper-slide"><img src="FEG-2.jpg" alt="Hair growth result 2" class="w-full rounded-xl"></div>
+                            <div class="swiper-slide"><img src="FEG-3.jpg" alt="Hair growth result 3" class="w-full rounded-xl"></div>
+                            <div class="swiper-slide"><img src="FEG-4-1-800x800.jpg" alt="Hair growth result 4" class="w-full rounded-xl"></div>
                         </div>
                         <div class="swiper-pagination"></div>
                     </div>
@@ -188,7 +189,8 @@ try {
                     <li>প্রাকৃতিক উপাদান দিয়ে তৈরি।</li>
                 </ul>
                  <div class="text-center mt-12">
-                    <img src="https://i.ibb.co/3k8gT5r/image.png" alt="FEG Hair Growth Serum Bottle" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
+                    <!-- UPDATED with local image -->
+                    <img src="FEGG.webp" alt="FEG Hair Growth Serum Bottle" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
                 </div>
             </div>
         </section>
@@ -298,7 +300,8 @@ try {
                         <div class="space-y-4">
                             <div class="flex justify-between items-center border-b border-gray-200 pb-4">
                                 <div class="flex items-center">
-                                    <img src="https://i.ibb.co/3k8gT5r/image.png" alt="Product Image" class="rounded-lg mr-4 border w-16 h-16 object-cover">
+                                    <!-- UPDATED with local image -->
+                                    <img src="FEGG.webp" alt="Product Image" class="rounded-lg mr-4 border w-16 h-16 object-cover">
                                     <div>
                                         <p class="font-semibold font-anek">FEG Hair Growth Serum</p>
                                         <p class="text-sm text-gray-500 font-hind">Quantity: 1</p>
@@ -406,4 +409,3 @@ try {
     </script>
 </body>
 </html>
-
