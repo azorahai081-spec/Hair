@@ -1,0 +1,14 @@
+<?php
+// Set the default timezone to ensure date and time are handled correctly.
+date_default_timezone_set('Asia/Dhaka');
+
+// --- Admin Credentials ---
+// IMPORTANT: Change these to your own secure username and password.
+// FIX: Changed ADMIN_USERNAME to ADMIN_USER to match its usage in auth.php
+define('ADMIN_USER', 'admin'); 
+
+// Use a strong password. You can generate a hash for a new password using: echo password_hash('YourNewPassword', PASSWORD_DEFAULT);
+// FIX: Changed ADMIN_PASSWORD_HASH to ADMIN_PASS_HASH to match its usage in auth.php
+define('ADMIN_PASS_HASH', '$2y$10$5BxXj1k9JiAzlHh/0J61KuMLys0j3AjgvOqAVmGUItKw3oRh3aLSO'); // Default password is 'password123'
+?>
+
