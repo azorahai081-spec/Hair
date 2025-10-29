@@ -2,6 +2,8 @@
 require_once 'includes/auth-check.php'; // $csrf_token and new functions are here
 require_once '../db-config.php';
 
+$current_page = basename($_SERVER['PHP_SELF']); // Get current page name
+
 // --- Search and Filtering Logic ---
 $search_term = $_GET['search'] ?? '';
 $sql = "SELECT * FROM orders";
@@ -40,39 +42,63 @@ $status_options = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled']
 </head>
 <body class="bg-gray-100">
 
+    <!-- Navigation -->
     <nav class="bg-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <span class="font-bold text-xl text-gray-800">Admin Panel</span>
                 </div>
-                <div>
-                    <a href="dashboard.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-                    <a href="index.php" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Manage Orders</a>
-                    
-                    <!-- UPDATED: Use can_manage_reviews() -->
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex md:items-center md:space-x-2">
+                    <a href="dashboard.php" class="<?php echo ($current_page == 'dashboard.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="index.php" class="<?php echo ($current_page == 'index.php' || $current_page == 'edit-order.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Orders</a>
                     <?php if (can_manage_reviews()): ?>
-                        <a href="manage-reviews.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Reviews</a>
+                        <a href="manage-reviews.php" class="<?php echo ($current_page == 'manage-reviews.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Reviews</a>
                     <?php endif; ?>
-                    
                     <?php if (is_superadmin()): ?>
-                        <a href="manage-products.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Products</a>
-                        <a href="manage-settings.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
-                        <a href="manage-users.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Users</a>
+                        <a href="manage-products.php" class="<?php echo ($current_page == 'manage-products.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Products</a>
+                        <a href="manage-settings.php" class="<?php echo ($current_page == 'manage-settings.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+                        <a href="manage-users.php" class="<?php echo ($current_page == 'manage-users.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Users</a>
                     <?php endif; ?>
                     <a href="logout.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
                 </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="dashboard.php" class="<?php echo ($current_page == 'dashboard.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="index.php" class="<?php echo ($current_page == 'index.php' || $current_page == 'edit-order.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Orders</a>
+                <?php if (can_manage_reviews()): ?>
+                    <a href="manage-reviews.php" class="<?php echo ($current_page == 'manage-reviews.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Reviews</a>
+                <?php endif; ?>
+                <?php if (is_superadmin()): ?>
+                    <a href="manage-products.php" class="<?php echo ($current_page == 'manage-products.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Products</a>
+                    <a href="manage-settings.php" class="<?php echo ($current_page == 'manage-settings.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Settings</a>
+                    <a href="manage-users.php" class="<?php echo ($current_page == 'manage-users.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Users</a>
+                <?php endif; ?>
+                <a href="logout.php" class="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
             </div>
         </div>
     </nav>
+    <!-- End Navigation -->
 
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div class="px-4 py-6 sm:px-0">
             <div class="md:flex justify-between items-center mb-4">
                 <h1 class="text-2xl font-semibold text-gray-900">Manage Orders</h1>
-                <form method="GET" action="index.php" class="mt-4 md:mt-0 flex items-center">
+                <form method="GET" action="index.php" class="mt-4 md:mt-0 flex items-center w-full md:w-auto">
                     <input type="text" name="search" placeholder="Search orders..."
-                           class="border rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                           class="border rounded-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 flex-grow md:flex-grow-0"
                            value="<?php echo htmlspecialchars($search_term); ?>">
                     <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-md ml-2">Search</button>
                 </form>
@@ -84,22 +110,24 @@ $status_options = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled']
                 
                 <!-- UPDATED: Show if user can change status OR is superadmin (for delete) -->
                 <?php if (can_change_status() || is_superadmin()): ?>
-                <div class="bg-gray-50 p-3 mb-4 rounded-md border flex items-center gap-4">
-                    <span class="text-sm font-medium text-gray-700">With selected:</span>
+                <div class="bg-gray-50 p-3 mb-4 rounded-md border flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <span class="text-sm font-medium text-gray-700 mb-2 sm:mb-0">With selected:</span>
                     
                     <!-- UPDATED: Only show if user can change status -->
                     <?php if (can_change_status()): ?>
-                        <select id="bulk-status-select" name="bulk_status" class="rounded-md border-gray-300 shadow-sm text-sm">
-                            <option value="">Change status to...</option>
-                            <?php foreach($status_options as $option): ?>
-                                <option value="<?php echo $option; ?>"><?php echo $option; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button type="button" id="apply-status-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm font-semibold hover:bg-indigo-700">Apply</button>
+                        <div class="flex items-center gap-2">
+                            <select id="bulk-status-select" name="bulk_status" class="rounded-md border-gray-300 shadow-sm text-sm w-full">
+                                <option value="">Change status to...</option>
+                                <?php foreach($status_options as $option): ?>
+                                    <option value="<?php echo $option; ?>"><?php echo $option; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <button type="button" id="apply-status-btn" class="bg-indigo-600 text-white py-1 px-3 rounded-md text-sm font-semibold hover:bg-indigo-700 whitespace-nowrap">Apply</button>
+                        </div>
                     <?php endif; ?>
 
                     <?php if (is_superadmin()): // Only superadmins can bulk delete ?>
-                        <button type="button" id="bulk-delete-btn" class="bg-red-600 text-white py-1 px-3 rounded-md text-sm font-semibold hover:bg-red-700">Delete Selected</button>
+                        <button type="button" id="bulk-delete-btn" class="bg-red-600 text-white py-1 px-3 rounded-md text-sm font-semibold hover:bg-red-700 whitespace-nowrap">Delete Selected</button>
                     <?php endif; ?>
                 </div>
                 <?php endif; ?>
@@ -231,6 +259,12 @@ $status_options = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled']
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Toggle
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                var menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            });
+
             // --- UPDATED JAVASCRIPT PERMISSIONS ---
             const userCanChangeStatus = <?php echo can_change_status() ? 'true' : 'false'; ?>;
             const userIsSuperAdmin = <?php echo is_superadmin() ? 'true' : 'false'; ?>;
@@ -314,4 +348,3 @@ $status_options = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled']
 
 </body>
 </html>
-

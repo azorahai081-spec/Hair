@@ -1,6 +1,8 @@
 <?php
 require_once 'includes/auth-check.php'; // $csrf_token and new functions are here
 require_once '../db-config.php';
+
+$current_page = basename($_SERVER['PHP_SELF']); // Get current page name
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,28 +19,55 @@ require_once '../db-config.php';
     </style>
 </head>
 <body class="bg-gray-100 p-4 sm:p-8">
+    <!-- Navigation -->
     <nav class="bg-white shadow-md mb-8 -mt-4 -mx-4 sm:-mx-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <span class="font-bold text-xl text-gray-800">Admin Panel</span>
                 </div>
-                <div>
-                    <a href="dashboard.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-                    <a href="index.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Orders</a>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex md:items-center md:space-x-2">
+                    <a href="dashboard.php" class="<?php echo ($current_page == 'dashboard.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="index.php" class="<?php echo ($current_page == 'index.php' || $current_page == 'edit-order.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Orders</a>
                     <?php if (can_manage_reviews()): ?>
-                        <a href="manage-reviews.php" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Manage Reviews</a>
+                        <a href="manage-reviews.php" class="<?php echo ($current_page == 'manage-reviews.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Reviews</a>
                     <?php endif; ?>
                     <?php if (is_superadmin()): ?>
-                        <a href="manage-products.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Products</a>
-                        <a href="manage-settings.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
-                        <a href="manage-users.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Users</a>
+                        <a href="manage-products.php" class="<?php echo ($current_page == 'manage-products.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Products</a>
+                        <a href="manage-settings.php" class="<?php echo ($current_page == 'manage-settings.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+                        <a href="manage-users.php" class="<?php echo ($current_page == 'manage-users.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Users</a>
                     <?php endif; ?>
                     <a href="logout.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
                 </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="dashboard.php" class="<?php echo ($current_page == 'dashboard.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="index.php" class="<?php echo ($current_page == 'index.php' || $current_page == 'edit-order.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Orders</a>
+                <?php if (can_manage_reviews()): ?>
+                    <a href="manage-reviews.php" class="<?php echo ($current_page == 'manage-reviews.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Reviews</a>
+                <?php endif; ?>
+                <?php if (is_superadmin()): ?>
+                    <a href="manage-products.php" class="<?php echo ($current_page == 'manage-products.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Products</a>
+                    <a href="manage-settings.php" class="<?php echo ($current_page == 'manage-settings.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Settings</a>
+                    <a href="manage-users.php" class="<?php echo ($current_page == 'manage-users.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Users</a>
+                <?php endif; ?>
+                <a href="logout.php" class="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
             </div>
         </div>
     </nav>
+    <!-- End Navigation -->
 
     <div class="max-w-5xl mx-auto">
         <?php if (can_manage_reviews()): ?>
@@ -87,7 +116,7 @@ require_once '../db-config.php';
         <?php endif; ?>
 
         <div class="bg-white p-6 rounded-lg shadow-md">
-            <header class="flex justify-between items-center mb-4">
+            <header class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                  <h2 class="text-2xl font-bold">Existing Reviews</h2>
                  <input type="search" id="search-input" placeholder="Search reviews..." class="w-full md:w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </header>
@@ -97,6 +126,12 @@ require_once '../db-config.php';
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            var menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
         const reviewsList = document.getElementById('reviews-list');
         const searchInput = document.getElementById('search-input');
         let allReviews = [];
@@ -138,7 +173,7 @@ require_once '../db-config.php';
 
             filteredReviews.forEach(review => {
                 const reviewElement = document.createElement('div');
-                reviewElement.className = 'p-4 border rounded-lg flex justify-between items-start';
+                reviewElement.className = 'p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-start';
                 const isFeaturedClass = review.is_featured == 1 ? 'featured-star' : 'text-gray-400';
                 
                 let actionButtons = '';
@@ -148,7 +183,7 @@ require_once '../db-config.php';
                 
                     // Add Edit button (part of "manage")
                     actionButtons += `
-                        <div class="mt-2">
+                        <div class="mt-2 flex gap-2">
                             <button class="edit-btn text-blue-500 hover:text-blue-700 mr-2" data-id="${review.id}"><i class="fas fa-edit"></i></button>`;
                     
                     // Add Delete button (only if user has delete permission)
@@ -161,16 +196,16 @@ require_once '../db-config.php';
 
 
                 reviewElement.innerHTML = `
-                    <div class="flex items-start">
+                    <div class="flex items-start w-full">
                          ${canManageReviews ? `<i class="fas fa-star ${isFeaturedClass} mt-1 mr-4"></i>` : ''}
-                        <div>
+                        <div class="flex-grow">
                             <h3 class="font-bold">${escapeHTML(review.name)} <span class="text-yellow-400">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span></h3>
                             <p class="text-sm text-gray-500">${escapeHTML(review.date)}</p>
                             <p class="mt-2">${escapeHTML(review.review_text)}</p>
                             <p class="text-xs mt-2 font-semibold uppercase text-gray-400">Status: ${review.status}</p>
                         </div>
                     </div>
-                    <div class="flex-shrink-0 ml-4 flex flex-col items-end gap-2">
+                    <div class="flex-shrink-0 ml-0 sm:ml-4 mt-4 sm:mt-0 flex flex-row sm:flex-col items-start sm:items-end gap-2">
                        ${actionButtons}
                     </div>
                 `;
@@ -323,4 +358,3 @@ require_once '../db-config.php';
     </script>
 </body>
 </html>
-

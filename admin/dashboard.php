@@ -2,6 +2,8 @@
 require_once 'includes/auth-check.php';
 require_once '../db-config.php';
 
+$current_page = basename($_SERVER['PHP_SELF']); // Get current page name
+
 // --- Date Filter Logic ---
 $start_date = $_GET['start_date'] ?? date('Y-m-01');
 $end_date = $_GET['end_date'] ?? date('Y-m-t');
@@ -80,6 +82,39 @@ try {
     $location_sales_stmt->execute([$start_date, $end_date_for_query]);
     $location_sales = $location_sales_stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // --- Top Selling Products ---
+    $product_sales_stmt = $pdo->prepare(
+        "SELECT product_name, COUNT(*) as units_sold 
+         FROM orders 
+         WHERE order_date BETWEEN ? AND ? 
+         GROUP BY product_name 
+         ORDER BY units_sold DESC"
+    );
+    $product_sales_stmt->execute([$start_date, $end_date_for_query]);
+    $product_sales = $product_sales_stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Data for Pie Chart - with shortened names
+    $product_chart_labels = [];
+    $product_chart_data = [];
+    $product_name_prefix_to_remove = 'FEG Hair Growth Serum usa 50ml × '; // Adjust this if product names change
+    
+    foreach ($product_sales as $product) {
+        // Attempt to shorten the name for better chart display
+        $short_name = $product['product_name'];
+        if (strpos($short_name, $product_name_prefix_to_remove) === 0) {
+             $short_name = str_replace($product_name_prefix_to_remove, '', $short_name);
+        }
+        // Fallback for other long names
+        if (strlen($short_name) > 20) { 
+            $short_name = substr($short_name, 0, 20) . '...';
+        }
+        
+        $product_chart_labels[] = $short_name;
+        $product_chart_data[] = $product['units_sold'];
+    }
+    $product_chart_labels_json = json_encode($product_chart_labels);
+    $product_chart_data_json = json_encode($product_chart_data);
+
 
 } catch (PDOException $e) {
     $error_message = "Database error: " . $e->getMessage();
@@ -99,35 +134,64 @@ try {
 </head>
 <body class="bg-gray-100">
 
+    <!-- Navigation -->
     <nav class="bg-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <span class="font-bold text-xl text-gray-800">Admin Panel</span>
                 </div>
-                <div>
-                    <a href="dashboard.php" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-                    <a href="index.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Orders</a>
-                    <a href="manage-reviews.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Reviews</a>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex md:items-center md:space-x-2">
+                    <a href="dashboard.php" class="<?php echo ($current_page == 'dashboard.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="index.php" class="<?php echo ($current_page == 'index.php' || $current_page == 'edit-order.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Orders</a>
+                    <?php if (can_manage_reviews()): ?>
+                        <a href="manage-reviews.php" class="<?php echo ($current_page == 'manage-reviews.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Reviews</a>
+                    <?php endif; ?>
                     <?php if (is_superadmin()): ?>
-                        <a href="manage-products.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Products</a>
-                        <a href="manage-settings.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
-                        <a href="manage-users.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Users</a>
+                        <a href="manage-products.php" class="<?php echo ($current_page == 'manage-products.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Products</a>
+                        <a href="manage-settings.php" class="<?php echo ($current_page == 'manage-settings.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+                        <a href="manage-users.php" class="<?php echo ($current_page == 'manage-users.php') ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'; ?> px-3 py-2 rounded-md text-sm font-medium">Manage Users</a>
                     <?php endif; ?>
                     <a href="logout.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
                 </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="dashboard.php" class="<?php echo ($current_page == 'dashboard.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="index.php" class="<?php echo ($current_page == 'index.php' || $current_page == 'edit-order.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Orders</a>
+                <?php if (can_manage_reviews()): ?>
+                    <a href="manage-reviews.php" class="<?php echo ($current_page == 'manage-reviews.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Reviews</a>
+                <?php endif; ?>
+                <?php if (is_superadmin()): ?>
+                    <a href="manage-products.php" class="<?php echo ($current_page == 'manage-products.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Products</a>
+                    <a href="manage-settings.php" class="<?php echo ($current_page == 'manage-settings.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Settings</a>
+                    <a href="manage-users.php" class="<?php echo ($current_page == 'manage-users.php') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100'; ?> block px-3 py-2 rounded-md text-base font-medium">Manage Users</a>
+                <?php endif; ?>
+                <a href="logout.php" class="text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
             </div>
         </div>
     </nav>
+    <!-- End Navigation -->
 
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div class="px-4 flex flex-col md:flex-row justify-between md:items-center">
             <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
-            <form method="GET" class="flex items-center gap-2 mt-4 md:mt-0">
-                <input type="date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>" class="border-gray-300 rounded-md shadow-sm">
-                <span class="text-gray-500">to</span>
-                <input type="date" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>" class="border-gray-300 rounded-md shadow-sm">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Filter</button>
+            <form method="GET" class="flex flex-col sm:flex-row items-center gap-2 mt-4 md:mt-0">
+                <input type="date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>" class="w-full sm:w-auto border-gray-300 rounded-md shadow-sm">
+                <span class="text-gray-500 hidden sm:inline">to</span>
+                <input type="date" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>" class="w-full sm:w-auto border-gray-300 rounded-md shadow-sm">
+                <button type="submit" class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-md">Filter</button>
             </form>
         </div>
         
@@ -216,13 +280,42 @@ try {
                             <canvas id="yearlySalesChart"></canvas>
                         </div>
                     </div>
+                    
+                    <!-- Top Products Card -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Top Selling Products (Units)</h2>
+                        <?php if (empty($product_sales)): ?>
+                            <p class="text-gray-500">No product sales data for this period.</p>
+                        <?php else: ?>
+                            <div class="max-w-xs mx-auto">
+                                <canvas id="productPieChart"></canvas>
+                            </div>
+                            <ul class="space-y-2 mt-4">
+                               <?php foreach ($product_sales as $product): ?>
+                                    <li class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-600 truncate pr-2" title="<?php echo htmlspecialchars($product['product_name']); ?>">
+                                            <?php 
+                                                $display_name = $product['product_name'];
+                                                if (strpos($display_name, $product_name_prefix_to_remove) === 0) {
+                                                    $display_name = str_replace($product_name_prefix_to_remove, '', $display_name);
+                                                }
+                                                echo htmlspecialchars($display_name);
+                                            ?>
+                                        </span>
+                                        <span class="font-semibold text-gray-800 whitespace-nowrap"><?php echo $product['units_sold']; ?> units</span>
+                                    </li>
+                               <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
+
                     <div class="bg-white p-6 rounded-lg shadow">
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Top 5 Locations</h2>
                         <ul class="space-y-2">
                            <?php foreach ($location_sales as $location): ?>
                                 <li class="flex justify-between items-center text-sm">
-                                    <span class="text-gray-600"><?php echo htmlspecialchars($location['customer_address']); ?></span>
-                                    <span class="font-semibold text-gray-800">৳ <?php echo number_format($location['total']); ?></span>
+                                    <span class="text-gray-600 truncate pr-2" title="<?php echo htmlspecialchars($location['customer_address']); ?>"><?php echo htmlspecialchars($location['customer_address']); ?></span>
+                                    <span class="font-semibold text-gray-800 whitespace-nowrap">৳ <?php echo number_format($location['total']); ?></span>
                                 </li>
                            <?php endforeach; ?>
                         </ul>
@@ -236,6 +329,12 @@ try {
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Toggle
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                var menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            });
+
             // Daily Sales Chart
             const ctx = document.getElementById('salesChart').getContext('2d');
             const salesChart = new Chart(ctx, {
@@ -292,6 +391,53 @@ try {
                     }
                 }
             });
+
+            // Product Sales Pie Chart
+            const productCtx = document.getElementById('productPieChart');
+            if (productCtx) {
+                const productPieChart = new Chart(productCtx.getContext('2d'), {
+                    type: 'pie',
+                    data: {
+                        labels: <?php echo $product_chart_labels_json; ?>,
+                        datasets: [{
+                            label: 'Units Sold',
+                            data: <?php echo $product_chart_data_json; ?>,
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.7)',
+                                'rgba(239, 68, 68, 0.7)',
+                                'rgba(245, 158, 11, 0.7)',
+                                'rgba(34, 197, 94, 0.7)',
+                                'rgba(139, 92, 246, 0.7)'
+                            ],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: context => {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' units';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
         });
     </script>
 </body>
