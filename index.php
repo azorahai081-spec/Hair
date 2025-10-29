@@ -15,12 +15,13 @@ unset($_SESSION['error_message']); // Clear the message after displaying it once
 
 // --- Fetch reviews for display ---
 try {
-    // Fetch featured reviews (up to 3)
-    $stmt_featured = $pdo->query("SELECT name, rating, review_text, image_initials FROM reviews WHERE status = 'approved' AND is_featured = 1 ORDER BY id DESC LIMIT 3");
+    // (MODIFIED) Fetch featured reviews (up to 6)
+    $stmt_featured = $pdo->query("SELECT name, rating, review_text, image_initials FROM reviews WHERE status = 'approved' AND is_featured = 1 ORDER BY id DESC LIMIT 6");
     $featured_reviews = $stmt_featured->fetchAll();
 
     $reviews = $featured_reviews;
-    $limit = 3 - count($featured_reviews);
+    // (MODIFIED) Set limit to 6
+    $limit = 6 - count($featured_reviews);
 
     if ($limit > 0) {
         // Fetch latest non-featured reviews to fill the remaining spots
@@ -561,5 +562,4 @@ $products = [
     </script>
 </body>
 </html>
-
 
