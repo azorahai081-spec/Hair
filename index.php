@@ -27,6 +27,23 @@ try {
 } catch (PDOException $e) {
     $reviews = []; // In case of error, show no reviews.
 }
+
+// --- Product Options ---
+$products = [
+    '100ml' => [
+        'name' => 'Hair Code 100ml (1 Month)',
+        'price' => 800,
+        'original_price' => 990,
+        'image' => 'haircode.webp' // Assuming same image for now
+    ],
+    '200ml' => [
+        'name' => 'Hair Code 200ml (2 Month Course)',
+        'price' => 1500,
+        'original_price' => 1990,
+        'image' => 'haircode.webp' // Assuming same image for now
+    ]
+];
+
 ?>
 <!DOCTYPE html>
 <html lang="bn">
@@ -115,6 +132,14 @@ try {
             color: #111827;
             text-align: center;
         }
+        /* Style for selected product option */
+        .product-option input:checked + label {
+            border-color: #2563eb; /* Blue border */
+            background-color: #eff6ff; /* Light blue background */
+        }
+         .product-option label {
+             transition: all 0.2s ease-in-out;
+         }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -136,10 +161,10 @@ try {
                 <!-- Left Column: Image Slider --><div class="rounded-lg shadow-2xl">
                     <div class="swiper">
                         <div class="swiper-wrapper">
-                            <!-- Slides - UPDATED with local images --><div class="swiper-slide"><img src="FEG-1-1.jpg" alt="Hair growth result 1" class="w-full rounded-xl"></div>
-                            <div class="swiper-slide"><img src="FEG-2.jpg" alt="Hair growth result 2" class="w-full rounded-xl"></div>
-                            <div class="swiper-slide"><img src="FEG-3.jpg" alt="Hair growth result 3" class="w-full rounded-xl"></div>
-                            <div class="swiper-slide"><img src="FEG-4-1-800x800.jpg" alt="Hair growth result 4" class="w-full rounded-xl"></div>
+                            <!-- Slides - UPDATED with local images --><div class="swiper-slide"><img src="slide1.webp" alt="A before-and-after image of a man's head. The 'before' image shows a receding hairline and thinning on top, while the 'after' image shows a full, thick head of hair." class="w-full rounded-xl"></div>
+                            <div class="swiper-slide"><img src="slide2.webp" alt="A before-and-after comparison of a man's head from the back. The 'before' image shows thinning hair on the crown, and the 'after' image shows a full head of hair." class="w-full rounded-xl"></div>
+                            <div class="swiper-slide"><img src="slide3.webp" alt="A close-up before-and-after image of a woman's hair part. The 'before' image shows a wide part with visible scalp, and the 'after' image shows a narrow part with thicker, fuller hair." class="w-full rounded-xl"></div>
+                            <div class="swiper-slide"><img src="slide4.webp" alt="A top-down before-and-after view of a man's head. The 'before' image shows significant hair thinning, and the 'after' image shows full, thick hair coverage." class="w-full rounded-xl"></div>
                         </div>
                         <div class="swiper-pagination"></div>
                     </div>
@@ -152,7 +177,7 @@ try {
                      <div class="space-y-4 text-gray-600 text-lg mt-4 font-hind">
                          <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">চুল পড়া পুরোপুরি বন্ধ করে।</span></p>
                          <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">মাথার ত্বকের রক্ত সঞ্চালন বৃদ্ধি করে।</span></p>
-                         <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">নতুন চুল গজাতে সাহায্য করে।</span></p>
+                         <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold"><b>১৫</b> দিনের মধ্যে নতুন চুল গজায়।</span></p>
                          <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">চুলের গোড়া মজবুত করে।</span></p>
                          <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">নারী ও পুরুষ উভয়ের জন্য কার্যকর</span></p>
                      </div>
@@ -202,7 +227,7 @@ try {
                 </div>
                  
                  <div class="text-center mt-12">
-                     <!-- UPDATED with local image --><img src="FEGG.webp" alt="Hair Code Bottle" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
+                     <!-- UPDATED with local image --><img src="haircode.webp" alt="An advertisement for 'Premium Hair Code' hair serum, showing the bottle on a white pedestal. Key benefits listed are: increases blood circulation, promotes new hair growth, and effective for both men and women. A 'Shop Now' button is at the bottom" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
                  </div>
             </div>
         </section>
@@ -249,7 +274,7 @@ try {
                     </div>
                     <!-- FAQ 2 --><div class="bg-gray-50 p-6 rounded-lg border-l-4 border-blue-600 shadow-sm">
                         <h3 class="text-xl font-semibold mb-3 font-anek text-gray-900">স্থায়ীভাবে সমাধানের জন্য কতোদিন ব্যাবহার করতে হবে?</h3>
-                        <p class="text-gray-700">এটি দুই মাসের কোর্স। ১৫ দিনের মধ্যে DHT কে ব্লক করে চুল পড়া বন্ধ করে, এবং এক মাসের মধ্যে নতুন চুল গজানো শুরু হয়। স্থায়িত্বের জন্য দুই মাস ব্যাবহার করতে হবে।</p>
+                        <p class="text-gray-700">এটি দুই মাসের কোর্স। <b>১৫</b> দিনের মধ্যে DHT কে ব্লক করে চুল পড়া বন্ধ করে, এবং এক মাসের মধ্যে নতুন চুল গজানো শুরু হয়। স্থায়িত্বের জন্য দুই মাস ব্যাবহার করতে হবে।</p>
                     </div>
                  </div>
             </div>
@@ -302,7 +327,8 @@ try {
              <div class="container mx-auto px-4">
                  <div class="max-w-3xl mx-auto text-center mb-12">
                       <h2 class="section-title gradient-text font-anek">আজই অর্ডার করুন!</h2>
-                      <p class="text-xl text-gray-600 -mt-8 font-hind">বিশেষ মূল্য <del class="text-red-500">৳2500</del> এখন মাত্র <span class="text-blue-700 font-bold text-2xl">৳1460</span></p>
+                      <!-- Removed specific price, added options -->
+                      <p class="text-xl text-gray-600 -mt-8 font-hind">নিচের অপশন থেকে আপনার পছন্দের প্যাকটি বেছে নিন:</p>
                  </div>
                 
                  <?php if ($error_message): ?>
@@ -313,22 +339,24 @@ try {
                  <?php endif; ?>
 
                 <form id="billing-form" action="process-order.php" method="POST" class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                    <input type="hidden" name="product_name" value="Hair Code usa 50ml × 1">
+                    <!-- Hidden inputs for selected product details -->
+                    <input type="hidden" id="selected_product_name" name="selected_product_name" value="<?php echo htmlspecialchars($products['100ml']['name']); ?>">
+                    <input type="hidden" id="selected_product_price" name="selected_product_price" value="<?php echo htmlspecialchars($products['100ml']['price']); ?>">
 
                     <!-- Left Column: Billing Details --><div class="bg-gray-50 p-6 md:p-8 rounded-lg shadow-lg border border-gray-200">
                         <h3 class="text-2xl font-semibold mb-6 text-gray-900 font-anek">আপনার ঠিকানা দিন</h3>
                         <div class="space-y-5">
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1 font-hind font-semibold">আপনার নাম *</label>
-                                <input type="text" id="name" name="customer_name" required class="block w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-blue-500 focus:border-blue-500 font-hind">
+                                <label for="customer_name" class="block text-sm font-medium text-gray-700 mb-1 font-hind font-semibold">আপনার নাম *</label>
+                                <input type="text" id="customer_name" name="customer_name" required class="block w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-blue-500 focus:border-blue-500 font-hind">
                             </div>
                             <div>
-                                <label for="address" class="block text-sm font-medium text-gray-700 mb-1 font-hind font-semibold">আপনার সম্পূর্ণ ঠিকানা *</label>
-                                <input type="text" id="address" name="customer_address" required class="block w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-blue-500 focus:border-blue-500 font-hind">
+                                <label for="customer_address" class="block text-sm font-medium text-gray-700 mb-1 font-hind font-semibold">আপনার সম্পূর্ণ ঠিকানা *</label>
+                                <input type="text" id="customer_address" name="customer_address" required class="block w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-blue-500 focus:border-blue-500 font-hind">
                             </div>
                             <div>
-                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1 font-hind font-semibold">আপনার মোবাইল নাম্বার *</label>
-                                <input type="tel" id="phone" name="customer_phone" required class="block w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-blue-500 focus:border-blue-500 font-hind">
+                                <label for="customer_phone" class="block text-sm font-medium text-gray-700 mb-1 font-hind font-semibold">আপনার মোবাইল নাম্বার *</label>
+                                <input type="tel" id="customer_phone" name="customer_phone" required class="block w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-blue-500 focus:border-blue-500 font-hind">
                             </div>
                         </div>
                     </div>
@@ -336,42 +364,59 @@ try {
                     <!-- Right Column: Your Order --><div class="bg-gray-50 p-6 md:p-8 rounded-lg shadow-lg border border-gray-200">
                         <h3 class="text-2xl font-semibold mb-6 text-gray-900 font-anek">আপনার অর্ডার</h3>
                         
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center border-b border-gray-200 pb-4">
-                                <div class="flex items-center">
-                                    <!-- UPDATED with local image --><img src="FEGG.webp" alt="Product Image" class="rounded-lg mr-4 border w-16 h-16 object-cover">
-                                    <div>
-                                        <p class="font-semibold font-anek">Hair Code</p>
-                                        <p class="text-sm text-gray-500 font-hind">Quantity: 1</p>
+                        <!-- Product Options -->
+                        <div class="space-y-4 mb-6">
+                             <h4 class="text-lg font-semibold text-gray-800 font-anek mb-3">পণ্য নির্বাচন করুন:</h4>
+                             <?php foreach ($products as $key => $product): ?>
+                             <div class="product-option">
+                                <input type="radio" id="product_<?php echo $key; ?>" name="product_option" value="<?php echo $product['price']; ?>" data-name="<?php echo htmlspecialchars($product['name']); ?>" class="hidden" <?php echo ($key === '100ml') ? 'checked' : ''; ?>>
+                                <label for="product_<?php echo $key; ?>" class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500">
+                                    <img src="<?php echo $product['image']; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="w-12 h-12 object-cover rounded-md mr-4">
+                                    <div class="flex-grow">
+                                        <p class="font-semibold font-anek text-gray-900"><?php echo htmlspecialchars($product['name']); ?></p>
+                                        <p class="text-sm font-hind">
+                                            <del class="text-red-500">৳ <?php echo $product['original_price']; ?></del>
+                                            <span class="text-blue-700 font-semibold ml-2">৳ <?php echo $product['price']; ?></span>
+                                        </p>
                                     </div>
-                                </div>
-                                <span id="product-price" class="font-semibold text-lg font-hind">৳ 1460</span>
-                            </div>
+                                    <div class="w-5 h-5 border-2 border-gray-300 rounded-full flex items-center justify-center ml-4 flex-shrink-0">
+                                         <span class="w-3 h-3 bg-blue-600 rounded-full hidden checkmark"></span>
+                                    </div>
+                                </label>
+                             </div>
+                              <style>
+                                  .product-option input:checked + label .checkmark { display: block; }
+                              </style>
+                             <?php endforeach; ?>
+                        </div>
 
-                            <div class="pt-4 space-y-2 font-hind">
+                        <!-- Order Summary -->
+                        <div class="space-y-4">
+                            
+                            <div class="pt-4 space-y-2 font-hind border-t border-gray-200">
                                 <div class="flex justify-between items-center text-gray-600">
                                     <span class="font-semibold">Subtotal</span>
-                                    <span id="subtotal-price" class="font-semibold">৳ 1460</span>
+                                    <span id="subtotal-price" class="font-semibold">৳ <?php echo $products['100ml']['price']; ?></span>
                                 </div>
                                  <div class="flex items-center justify-between text-gray-600">
                                       <label for="shipping-dhaka" class="flex items-center cursor-pointer font-semibold">
-                                           <input type="radio" id="shipping-dhaka" name="shipping_cost" value="70" class="h-4 w-4 text-blue-600 focus:ring-blue-500" checked>
+                                           <input type="radio" id="shipping-dhaka" name="shipping_cost" value="60" class="h-4 w-4 text-blue-600 focus:ring-blue-500" checked>
                                            <span class="ml-2">ডেলিভারি চার্জ (ঢাকার মধ্যে)</span>
                                       </label>
-                                      <span class="font-semibold">৳ 70</span>
+                                      <span class="font-semibold">৳ 60</span>
                                  </div>
                                  <div class="flex items-center justify-between text-gray-600">
                                       <label for="shipping-outside-dhaka" class="flex items-center cursor-pointer font-semibold">
-                                           <input type="radio" id="shipping-outside-dhaka" name="shipping_cost" value="120" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
+                                           <input type="radio" id="shipping-outside-dhaka" name="shipping_cost" value="100" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
                                            <span class="ml-2">ডেলিভারি চার্জ (ঢাকার বাইরে)</span>
                                       </label>
-                                      <span class="font-semibold">৳ 120</span>
+                                      <span class="font-semibold">৳ 100</span>
                                  </div>
                             </div>
-                             <div class="border-b border-gray-200 pt-4"></div>
+                             <div class="border-t border-gray-200 pt-4"></div>
                             <div class="flex justify-between items-center pt-4 text-xl font-semibold text-gray-900 font-hind">
                                 <span class="font-semibold">সর্বমোট</span>
-                                <span id="total-price" class="text-blue-700 font-semibold">৳ 1530</span>
+                                <span id="total-price" class="text-blue-700 font-semibold">৳ <?php echo $products['100ml']['price'] + 60; ?></span>
                             </div>
                         </div>
                         
@@ -422,22 +467,39 @@ try {
             });
 
             // --- Order Form Price Calculation ---
-            const productPrice = 1460;
+            const productOptions = document.querySelectorAll('input[name="product_option"]');
             const shippingOptions = document.querySelectorAll('input[name="shipping_cost"]');
             const subtotalPriceEl = document.getElementById('subtotal-price');
             const totalPriceEl = document.getElementById('total-price');
+            const selectedProductNameInput = document.getElementById('selected_product_name');
+            const selectedProductPriceInput = document.getElementById('selected_product_price');
+
 
             function updateTotalPrice() {
+                const selectedProduct = document.querySelector('input[name="product_option"]:checked');
                 const selectedShipping = document.querySelector('input[name="shipping_cost"]:checked');
+                
+                const productPrice = parseInt(selectedProduct.value, 10);
                 const shippingCost = parseInt(selectedShipping.value, 10);
                 const total = productPrice + shippingCost;
                 
+                // Update displayed prices
                 subtotalPriceEl.textContent = `৳ ${productPrice}`;
                 totalPriceEl.textContent = `৳ ${total}`;
+
+                // Update hidden inputs for form submission
+                selectedProductNameInput.value = selectedProduct.dataset.name;
+                selectedProductPriceInput.value = productPrice;
+
             }
             
-            updateTotalPrice(); // Initial calculation
+            // Initial calculation on page load
+            updateTotalPrice(); 
 
+            // Add event listeners to product and shipping options
+            productOptions.forEach(option => {
+                option.addEventListener('change', updateTotalPrice);
+            });
             shippingOptions.forEach(option => {
                 option.addEventListener('change', updateTotalPrice);
             });

@@ -10,12 +10,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// --- FIX: Get and Sanitize Form Data with corrected input names ---
+// --- Get and Sanitize Form Data ---
 $name = trim($_POST['customer_name'] ?? '');
 $address = trim($_POST['customer_address'] ?? '');
 $phone = trim($_POST['customer_phone'] ?? '');
-$shipping_cost = $_POST['shipping_cost'] ?? '70'; // Default to 70 if not set
-$product_name = trim($_POST['product_name'] ?? 'FEG Hair Growth Serum usa 50ml × 1');
+$shipping_cost_value = $_POST['shipping_cost'] ?? '60'; // Default to Dhaka shipping cost if not set
+
+// --- Get selected product details ---
+$selected_product_name = trim($_POST['selected_product_name'] ?? '');
+$selected_product_price = filter_var($_POST['selected_product_price'] ?? 0, FILTER_VALIDATE_FLOAT); // Get price from hidden input
 
 // --- Server-Side Validation ---
 $errors = [];
@@ -29,8 +32,16 @@ if (empty($address) || strlen($address) < 5) {
 if (!preg_match('/^(\+8801|01)[3-9]\d{8}$/', $phone)) {
     $errors[] = "Please enter a valid 11-digit Bangladeshi mobile number.";
 }
-if (empty($product_name)) {
-    $errors[] = "Field 'product' is required.";
+// Validate selected product
+if (empty($selected_product_name)) {
+    $errors[] = "Please select a product option.";
+}
+if ($selected_product_price === false || $selected_product_price <= 0) {
+    $errors[] = "Invalid product price selected.";
+}
+// Validate shipping cost
+if (!in_array($shipping_cost_value, ['60', '100'])) {
+    $errors[] = "Invalid shipping option selected.";
 }
 
 
@@ -45,10 +56,12 @@ if (!empty($errors)) {
 
 // --- If Validation Passes, Process the Order ---
 
-// Determine shipping location text based on the value.
-$shipping_location = ($shipping_cost === '120') ? ' ঢাকার বাইরে:' : ' ঢাকার মধ্যে:';
-$product_price = 1460;
-$total_price = $product_price + intval($shipping_cost);
+// Determine shipping location text and cost based on the value.
+$shipping_cost = intval($shipping_cost_value);
+$shipping_location = ($shipping_cost === 100) ? ' ঢাকার বাইরে:' : ' ঢাকার মধ্যে:';
+
+// --- Server-side recalculation of total price ---
+$total_price = $selected_product_price + $shipping_cost;
 
 // --- Set the current date and time ---
 $current_date = date('Y-m-d H:i:s');
@@ -62,8 +75,9 @@ try {
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')"
     );
     
-    // We pass a temporary order number, which we will update next.
-    $stmt->execute([$name, $address, $phone, $product_name, $shipping_location, $shipping_cost, $total_price, 'TEMP', $current_date]);
+    // Pass a temporary order number, which we will update next.
+    // Use the selected product name and recalculated total price
+    $stmt->execute([$name, $address, $phone, $selected_product_name, $shipping_location, $shipping_cost, $total_price, 'TEMP', $current_date]);
     
     // Get the unique ID of the order we just inserted.
     $last_insert_id = $pdo->lastInsertId();
@@ -84,6 +98,7 @@ try {
     $pdo->rollBack();
     // For a real app, you would log this error.
     $_SESSION['error_message'] = "A database error occurred. Please try again.";
+    error_log("Order processing error: " . $e->getMessage()); // Log the actual error
     header('Location: index.php#order-form');
     exit;
 }
@@ -94,9 +109,8 @@ if ($last_insert_id > 0) {
     header('Location: thank-you.php');
     exit;
 } else {
-    // Fallback error if something went wrong.
+    // Fallback error if something went wrong after commit (unlikely but possible).
     $_SESSION['error_message'] = "Could not save the order. Please try again.";
     header('Location: index.php#order-form');
     exit;
 }
-
