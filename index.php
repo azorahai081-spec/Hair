@@ -164,12 +164,12 @@ $products = [
     <main class="w-full">
         
         <!-- Header Section --><header class="text-center py-8 bg-white shadow-md">
-             <h1 class="font-anek font-semibold text-2xl md:text-3xl text-gray-900 flex items-center justify-center">
-                 <img src="https://placehold.co/24x18/DE281E/ffffff?text=US" alt="US Flag" class="mr-3">
-                 Hair Code
-             </h1>
-             <p class="font-hind font-semibold text-xl mt-3 text-blue-700">আমেরিকার বেস্ট সেলার, যা এখন থেকে বাংলাদেশে।</p>
-             <p class="font-hind font-semibold text-lg mt-1 text-gray-600">বিশেষজ্ঞদের মতে চুলের ৯০% সমস্যার সমাধান মাত্র ৩০ দিনে।</p>
+            <h1 class="font-anek font-semibold text-2xl md:text-3xl text-gray-900 flex items-center justify-center">
+                <img src="https://placehold.co/24x18/DE281E/ffffff?text=US" alt="US Flag" class="mr-3">
+                Hair Code
+            </h1>
+            <p class="font-hind font-semibold text-xl mt-3 text-blue-700">আমেরিকার বেস্ট সেলার, যা এখন থেকে বাংলাদেশে।</p>
+            <p class="font-hind font-semibold text-lg mt-1 text-gray-600">বিশেষজ্ঞদের মতে চুলের ৯০% সমস্যার সমাধান মাত্র ৩০ দিনে।</p>
         </header>
 
 
@@ -187,47 +187,47 @@ $products = [
                     </div>
                 </div>
                 
-                 <!-- Right Column: Info and Benefits --><div class="flex flex-col justify-center">
-                     <h2 class="hero-title my-4 text-center md:text-left gradient-text font-hind" style="font-size: 42px;">
-                         কেন ব্যবহার করবেন <strong class="font-semibold">Hair Code</strong>?
-                     </h2>
-                     <div class="space-y-4 text-gray-600 text-lg mt-4 font-hind">
-                         <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">চুল পড়া পুরোপুরি বন্ধ করে।</span></p>
-                         <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">মাথার ত্বকের রক্ত সঞ্চালন বৃদ্ধি করে।</span></p>
-                         <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold"><b>১৫</b> দিনের মধ্যে নতুন চুল গজায়।</span></p>
-                         <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">চুলের গোড়া মজবুত করে।</span></p>
-                         <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">নারী ও পুরুষ উভয়ের জন্য কার্যকর</span></p>
-                     </div>
+                    <!-- Right Column: Info and Benefits --><div class="flex flex-col justify-center">
+                        <h2 class="hero-title my-4 text-center md:text-left gradient-text font-hind" style="font-size: 42px;">
+                            কেন ব্যবহার করবেন <strong class="font-semibold">Hair Code</strong>?
+                        </h2>
+                        <div class="space-y-4 text-gray-600 text-lg mt-4 font-hind">
+                            <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">চুল পড়া পুরোপুরি বন্ধ করে।</span></p>
+                            <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">মাথার ত্বকের রক্ত সঞ্চালন বৃদ্ধি করে।</span></p>
+                            <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold"><b>১৫</b> দিনের মধ্যে নতুন চুল গজায়।</span></p>
+                            <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">চুলের গোড়া মজবুত করে।</span></p>
+                            <p class="flex items-start"><span>✅</span><span class="ml-3 font-semibold">নারী ও পুরুষ উভয়ের জন্য কার্যকর</span></p>
+                        </div>
 
-                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                         <a href="#order-form" class="cta-button w-full text-center bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all font-anek">
-                             অর্ডার করুন
-                         </a>
-                         <a href="tel:+8801234567890" class="cta-button w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all font-anek">
-                             কল করুন
-                         </a>
+                        <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                            <a href="#order-form" class="cta-button w-full text-center bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all font-anek">
+                                অর্ডার করুন
+                            </a>
+                            <a href="tel:+8801234567890" class="cta-button w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all font-anek">
+                                কল করুন
+                            </a>
+                        </div>
                     </div>
-                </div>
-        </section>
+            </section>
 
         <!-- Ingredients Section --><section class="py-16 md:py-24 bg-gray-50">
             <div class="container mx-auto px-4">
-                 <div class="section-subtitle-container">
-                     <span class="text-2xl">🧪</span>
+                <div class="section-subtitle-container">
+                    <span class="text-2xl">🧪</span>
                     <h3 class="section-subtitle font-hind">প্রডাক্টের কার্যকারী উপাদান ও উপকারিতা</h3>
-                 </div>
+                </div>
 
                 <!-- NEW Updated 2-Column Layout --><div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                     <!-- Column 1: Ingredients --><div>
                         <h4 class="text-2xl font-semibold mb-4 font-anek text-blue-700 text-left">প্রধান উপাদান</h4>
                         <ul class="mt-4 text-gray-600 list-disc list-inside text-left text-lg font-hind space-y-2">
-                             <li class="font-semibold">ভিটামিন এ - সি</li>
-                             <li class="font-semibold">ওমেগা - থ্রি</li>
-                             <li class="font-semibold">ফ্যাটি এসিড</li> <!-- Corrected spelling --><li class="font-semibold">পটাসিয়াম</li>
-                             <li class="font-semibold">ম্যাগনেসিয়াম</li>
-                             <li class="font-semibold">ক্যালসিয়াম</li>
-                             <li class="font-semibold">আমলকি</li>
-                             <li class="font-semibold">নিম</li>
+                            <li class="font-semibold">ভিটামিন এ - সি</li>
+                            <li class="font-semibold">ওমেগা - থ্রি</li>
+                            <li class="font-semibold">ফ্যাটি এসিড</li> <!-- Corrected spelling --><li class="font-semibold">পটাসিয়াম</li>
+                            <li class="font-semibold">ম্যাগনেসিয়াম</li>
+                            <li class="font-semibold">ক্যালসিয়াম</li>
+                            <li class="font-semibold">আমলকি</li>
+                            <li class="font-semibold">নিম</li>
                         </ul>
                     </div>
                     
@@ -242,10 +242,10 @@ $products = [
                         </ul>
                     </div>
                 </div>
-                 
-                 <div class="text-center mt-12">
-                     <!-- UPDATED with local image --><img src="haircode.webp" alt="An advertisement for 'Premium Hair Code' hair serum, showing the bottle on a white pedestal. Key benefits listed are: increases blood circulation, promotes new hair growth, and effective for both men and women. A 'Shop Now' button is at the bottom" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
-                 </div>
+                
+                <div class="text-center mt-12">
+                    <!-- UPDATED with local image --><img src="haircode.webp" alt="An advertisement for 'Premium Hair Code' hair serum, showing the bottle on a white pedestal. Key benefits listed are: increases blood circulation, promotes new hair growth, and effective for both men and women. A 'Shop Now' button is at the bottom" class="w-full max-w-md mx-auto rounded-lg shadow-lg">
+                </div>
             </div>
         </section>
         
@@ -273,7 +273,7 @@ $products = [
                         <h3 class="text-2xl font-semibold mb-3 font-anek text-gray-900">চুল পড়ার কারণ :</h3>
                         <p>যাদের শরীরে DHT তথা DIHYDROTESTOSTERON নামক এক প্রকার নেগেটিভ পদার্থের পরিমাণ বেড়ে যায় তাদের চুল অকালে ঝরে যায়। এই পদার্থটি চুলের কোষগুলোকে ডেমেজ করে দেয়, কোষে রক্ত সঞ্চালন এবং পুষ্টির যোগানকে ব্যাহত করে এবং কোষকে বেড়ে উঠতে বাধা প্রদান করে।ফলে চুলের সচল কোষগুলো মারা যায়।ধীরে ধীরে চুল পড়ার পরিমাণ বাড়লেও সেই হারে চুল গজায় না। ফলে একসময় চুলের পরিমাণ কমে যাওয়া, চুল পাতলা হয়ে যাওয়া, মাথার তালু গরম থাকা এবং মাথায় খুশকি ইত্যাদি সমস্যা গুলো দেখা দেয়।</p>
                     </div>
-                     <div>
+                    <div>
                         <h3 class="text-2xl font-semibold mb-3 font-anek text-gray-900">Hair Code যেভাবে কাজ করে :</h3>
                         <p>স্থায়ীভাবে চুল পড়া বন্ধ এবং নতুন চুল গজানোর জন্য Hair Code ব্যাবহার করুন। এটিতে রয়েছে DHT Anti Blocker System যা নেগেটিভ পদার্থকে পুরোপুরি দূর করে দিয়ে চুলের কোষকে ডেমেজ হওয়া থেকে রক্ষা করে,ফলে চুল পড়া স্থায়ীভাবে বন্ধ করে এবং নতুন চুল গজায়। মাথা ঠান্ডা রাখে ও খুশকি দূর করে।</p>
                     </div>
@@ -283,8 +283,8 @@ $products = [
 
         <!-- NEW: FAQ Section --><section class="py-16 md:py-24 bg-white">
             <div class="container mx-auto px-4">
-                 <h2 class="section-title gradient-text font-anek">আপনার মনে প্রশ্ন থাকতে পারে</h2>
-                 <div class="max-w-4xl mx-auto space-y-8 text-lg font-hind">
+                <h2 class="section-title gradient-text font-anek">আপনার মনে প্রশ্ন থাকতে পারে</h2>
+                <div class="max-w-4xl mx-auto space-y-8 text-lg font-hind">
                     <!-- FAQ 1 --><div class="bg-gray-50 p-6 rounded-lg border-l-4 border-blue-600 shadow-sm">
                         <h3 class="text-xl font-semibold mb-3 font-anek text-gray-900">কোনো সাইড ইফেক্ট আছে কিনা?</h3>
                         <p class="text-gray-700">সাধারণত সাইড ইফেক্ট থাকে ক্যামিকেল বা ড্রাগ জাতীয় ঔষধে।এটি সম্পুর্ন প্রাকৃতিক উপাদানে তৈরি। কোন মেডিসিন বা ক্যামিকেল নেই। এটি সম্পূর্ণ সাইড ইফেক্ট মুক্ত,কোনো ধরনের ক্ষতি হবেনা, শতভাগ রিস্ক ফ্রি।</p>
@@ -293,7 +293,7 @@ $products = [
                         <h3 class="text-xl font-semibold mb-3 font-anek text-gray-900">স্থায়ীভাবে সমাধানের জন্য কতোদিন ব্যাবহার করতে হবে?</h3>
                         <p class="text-gray-700">এটি দুই মাসের কোর্স। <b>১৫</b> দিনের মধ্যে DHT কে ব্লক করে চুল পড়া বন্ধ করে, এবং এক মাসের মধ্যে নতুন চুল গজানো শুরু হয়। স্থায়িত্বের জন্য দুই মাস ব্যাবহার করতে হবে।</p>
                     </div>
-                 </div>
+                </div>
             </div>
         </section>
 
@@ -325,8 +325,8 @@ $products = [
                                 </div>
                                 <p class="text-gray-600 text-sm flex-grow font-hind font-semibold">"<?php echo htmlspecialchars($review['review_text']); ?>"</p>
                                  <div class="mt-4 pt-4 border-t border-gray-200 flex items-center text-xs text-green-600 font-semibold">
-                                     <i class="fas fa-check-circle mr-2"></i>
-                                     <span>Verified Customer</span>
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    <span>Verified Customer</span>
                                  </div>
                             </div>
                         <?php endforeach; ?>
@@ -341,19 +341,19 @@ $products = [
         </section>
 
         <!-- Order Form Section --><section id="order-form" class="bg-white py-16 md:py-24">
-             <div class="container mx-auto px-4">
-                 <div class="max-w-3xl mx-auto text-center mb-12">
-                      <h2 class="section-title gradient-text font-anek">আজই অর্ডার করুন!</h2>
-                      <!-- Removed specific price, added options -->
-                      <p class="text-xl text-gray-600 -mt-8 font-hind">নিচের অপশন থেকে আপনার পছন্দের প্যাকটি বেছে নিন:</p>
-                 </div>
+            <div class="container mx-auto px-4">
+                <div class="max-w-3xl mx-auto text-center mb-12">
+                    <h2 class="section-title gradient-text font-anek">আজই অর্ডার করুন!</h2>
+                    <!-- Removed specific price, added options -->
+                    <p class="text-xl text-gray-600 -mt-8 font-hind">নিচের অপশন থেকে আপনার পছন্দের প্যাকটি বেছে নিন:</p>
+                </div>
                 
-                 <?php if ($error_message): ?>
-                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 max-w-4xl mx-auto" role="alert">
-                         <strong class="font-semibold">Error!</strong>
-                         <span class="block sm:inline"><?php echo htmlspecialchars($error_message); ?></span>
-                     </div>
-                 <?php endif; ?>
+                <?php if ($error_message): ?>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 max-w-4xl mx-auto" role="alert">
+                        <strong class="font-semibold">Error!</strong>
+                        <span class="block sm:inline"><?php echo htmlspecialchars($error_message); ?></span>
+                    </div>
+                <?php endif; ?>
 
                 <form id="billing-form" action="process-order.php" method="POST" class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
                     
@@ -388,9 +388,9 @@ $products = [
                         
                         <!-- Product Options -->
                         <div class="space-y-4 mb-6">
-                             <h4 class="text-lg font-semibold text-gray-800 font-anek mb-3">পণ্য নির্বাচন করুন:</h4>
-                             <?php foreach ($products as $key => $product): ?>
-                             <div class="product-option">
+                            <h4 class="text-lg font-semibold text-gray-800 font-anek mb-3">পণ্য নির্বাচন করুন:</h4>
+                            <?php foreach ($products as $key => $product): ?>
+                            <div class="product-option">
                                 <input type="radio" id="product_<?php echo $key; ?>" name="product_option" value="<?php echo $product['price']; ?>" data-name="<?php echo htmlspecialchars($product['name']); ?>" class="hidden" <?php echo ($key === '100ml') ? 'checked' : ''; ?>>
                                 <label for="product_<?php echo $key; ?>" class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500">
                                     <img src="<?php echo $product['image']; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="w-12 h-12 object-cover rounded-md mr-4">
@@ -402,14 +402,26 @@ $products = [
                                         </p>
                                     </div>
                                     <div class="w-5 h-5 border-2 border-gray-300 rounded-full flex items-center justify-center ml-4 flex-shrink-0">
-                                         <span class="w-3 h-3 bg-blue-600 rounded-full hidden checkmark"></span>
+                                        <span class="w-3 h-3 bg-blue-600 rounded-full hidden checkmark"></span>
                                     </div>
                                 </label>
-                             </div>
-                              <style>
-                                  .product-option input:checked + label .checkmark { display: block; }
-                              </style>
-                             <?php endforeach; ?>
+                            </div>
+                             <style>
+                                .product-option input:checked + label .checkmark { display: block; }
+                             </style>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <!-- (ADDED) Payment Method Note -->
+                        <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <h4 class="text-lg font-semibold text-gray-900 font-anek mb-2">পেমেন্ট মেথড</h4>
+                            <div class="flex items-center text-gray-700 font-hind">
+                                <i class="fas fa-money-bill-wave text-green-600 mr-3 text-xl"></i>
+                                <div>
+                                    <p class="font-semibold">ক্যাশ অন ডেলিভারি</p>
+                                    <p class="text-sm">পণ্য হাতে পেয়ে ডেলিভারিম্যানের কাছে টাকা পরিশোধ করুন।</p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Order Summary -->
@@ -421,21 +433,21 @@ $products = [
                                     <span id="subtotal-price" class="font-semibold">৳ <?php echo $products['100ml']['price']; ?></span>
                                 </div>
                                  <div class="flex items-center justify-between text-gray-600">
-                                      <label for="shipping-dhaka" class="flex items-center cursor-pointer font-semibold">
-                                           <input type="radio" id="shipping-dhaka" name="shipping_cost" value="60" class="h-4 w-4 text-blue-600 focus:ring-blue-500" checked>
-                                           <span class="ml-2">ডেলিভারি চার্জ (ঢাকার মধ্যে)</span>
-                                      </label>
-                                      <span class="font-semibold">৳ 60</span>
+                                    <label for="shipping-dhaka" class="flex items-center cursor-pointer font-semibold">
+                                        <input type="radio" id="shipping-dhaka" name="shipping_cost" value="60" class="h-4 w-4 text-blue-600 focus:ring-blue-500" checked>
+                                        <span class="ml-2">ডেলিভারি চার্জ (ঢাকার মধ্যে)</span>
+                                    </label>
+                                    <span class="font-semibold">৳ 60</span>
                                  </div>
                                  <div class="flex items-center justify-between text-gray-600">
-                                      <label for="shipping-outside-dhaka" class="flex items-center cursor-pointer font-semibold">
-                                           <input type="radio" id="shipping-outside-dhaka" name="shipping_cost" value="100" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                                           <span class="ml-2">ডেলিভারি চার্জ (ঢাকার বাইরে)</span>
-                                      </label>
-                                      <span class="font-semibold">৳ 100</span>
+                                    <label for="shipping-outside-dhaka" class="flex items-center cursor-pointer font-semibold">
+                                        <input type="radio" id="shipping-outside-dhaka" name="shipping_cost" value="100" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2">ডেলিভারি চার্জ (ঢাকার বাইরে)</span>
+                                    </label>
+                                    <span class="font-semibold">৳ 100</span>
                                  </div>
                             </div>
-                             <div class="border-t border-gray-200 pt-4"></div>
+                            <div class="border-t border-gray-200 pt-4"></div>
                             <div class="flex justify-between items-center pt-4 text-xl font-semibold text-gray-900 font-hind">
                                 <span class="font-semibold">সর্বমোট</span>
                                 <span id="total-price" class="text-blue-700 font-semibold">৳ <?php echo $products['100ml']['price'] + 60; ?></span>
@@ -562,4 +574,3 @@ $products = [
     </script>
 </body>
 </html>
-
