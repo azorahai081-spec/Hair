@@ -36,21 +36,42 @@ try {
     $reviews = []; // In case of error, show no reviews.
 }
 
-// --- Product Options ---
-$products = [
-    '100ml' => [
-        'name' => 'Hair Code 100ml (1 Month)',
-        'price' => 800,
-        'original_price' => 990,
-        'image' => 'haircode.webp' // Assuming same image for now
-    ],
-    '200ml' => [
-        'name' => 'Hair Code 200ml (2 Month Course)',
-        'price' => 1500,
-        'original_price' => 1990,
-        'image' => 'haircode.webp' // Assuming same image for now
-    ]
-];
+// --- (MODIFIED) Fetch Settings and Products from Database ---
+try {
+    // Fetch Settings
+    $settings_stmt = $pdo->query("SELECT setting_key, setting_value FROM settings");
+    $settings_raw = $settings_stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    $settings = [
+        'shipping_dhaka' => $settings_raw['shipping_dhaka'] ?? 60,
+        'shipping_outside' => $settings_raw['shipping_outside'] ?? 100,
+    ];
+
+    // Fetch Products
+    $products_stmt = $pdo->query("SELECT * FROM products WHERE is_active = 1 ORDER BY sort_order ASC");
+    $products_from_db = $products_stmt->fetchAll();
+    
+    $products = [];
+    foreach ($products_from_db as $p) {
+        $products[$p['product_key']] = $p; // Recreate the key-based array
+    }
+    
+    // Get the first product for default values
+    $first_product = !empty($products) ? array_values($products)[0] : [
+        'name' => 'No Product Available', 'price' => 0, 'original_price' => 0, 'image' => 'haircode.webp', 'product_key' => 'default'
+    ];
+    $first_product_key = $first_product['product_key'];
+
+} catch (PDOException $e) {
+    // Fallback if database fails
+    $settings = ['shipping_dhaka' => 60, 'shipping_outside' => 100];
+    $products = [
+        '100ml' => ['name' => 'Hair Code 100ml (1 Month)', 'price' => 800, 'original_price' => 990, 'image' => 'haircode.webp', 'product_key' => '100ml']
+    ];
+    $first_product = array_values($products)[0];
+    $first_product_key = $first_product['product_key'];
+    $error_message = "Error loading dynamic content. Please try again later.";
+}
+// --- End Fetch ---
 
 ?>
 <!DOCTYPE html>
@@ -362,8 +383,8 @@ $products = [
                     <input type="hidden" name="recaptcha_token" id="recaptcha_token">
 
                     <!-- Hidden inputs for selected product details -->
-                    <input type="hidden" id="selected_product_name" name="selected_product_name" value="<?php echo htmlspecialchars($products['100ml']['name']); ?>">
-                    <input type="hidden" id="selected_product_price" name="selected_product_price" value="<?php echo htmlspecialchars($products['100ml']['price']); ?>">
+                    <input type="hidden" id="selected_product_name" name="selected_product_name" value="<?php echo htmlspecialchars($first_product['name']); ?>">
+                    <input type="hidden" id="selected_product_price" name="selected_product_price" value="<?php echo htmlspecialchars($first_product['price']); ?>">
 
                     <!-- Left Column: Billing Details --><div class="bg-gray-50 p-6 md:p-8 rounded-lg shadow-lg border border-gray-200">
                         <h3 class="text-2xl font-semibold mb-6 text-gray-900 font-anek">আপনার ঠিকানা দিন</h3>
@@ -389,27 +410,31 @@ $products = [
                         <!-- Product Options -->
                         <div class="space-y-4 mb-6">
                             <h4 class="text-lg font-semibold text-gray-800 font-anek mb-3">পণ্য নির্বাচন করুন:</h4>
-                            <?php foreach ($products as $key => $product): ?>
-                            <div class="product-option">
-                                <input type="radio" id="product_<?php echo $key; ?>" name="product_option" value="<?php echo $product['price']; ?>" data-name="<?php echo htmlspecialchars($product['name']); ?>" class="hidden" <?php echo ($key === '100ml') ? 'checked' : ''; ?>>
-                                <label for="product_<?php echo $key; ?>" class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500">
-                                    <img src="<?php echo $product['image']; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="w-12 h-12 object-cover rounded-md mr-4">
-                                    <div class="flex-grow">
-                                        <p class="font-semibold font-anek text-gray-900"><?php echo htmlspecialchars($product['name']); ?></p>
-                                        <p class="text-sm font-hind">
-                                            <del class="text-red-500">৳ <?php echo $product['original_price']; ?></del>
-                                            <span class="text-blue-700 font-semibold ml-2">৳ <?php echo $product['price']; ?></span>
-                                        </p>
-                                    </div>
-                                    <div class="w-5 h-5 border-2 border-gray-300 rounded-full flex items-center justify-center ml-4 flex-shrink-0">
-                                        <span class="w-3 h-3 bg-blue-600 rounded-full hidden checkmark"></span>
-                                    </div>
-                                </label>
-                            </div>
-                             <style>
-                                .product-option input:checked + label .checkmark { display: block; }
-                             </style>
-                            <?php endforeach; ?>
+                            <?php if (empty($products)): ?>
+                                <p class="text-red-500 font-hind">No products are currently available.</p>
+                            <?php else: ?>
+                                <?php foreach ($products as $key => $product): ?>
+                                <div class="product-option">
+                                    <input type="radio" id="product_<?php echo $key; ?>" name="product_option" value="<?php echo $product['price']; ?>" data-name="<?php echo htmlspecialchars($product['name']); ?>" class="hidden" <?php echo ($key === $first_product_key) ? 'checked' : ''; ?>>
+                                    <label for="product_<?php echo $key; ?>" class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500">
+                                        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="w-12 h-12 object-cover rounded-md mr-4">
+                                        <div class="flex-grow">
+                                            <p class="font-semibold font-anek text-gray-900"><?php echo htmlspecialchars($product['name']); ?></p>
+                                            <p class="text-sm font-hind">
+                                                <del class="text-red-500">৳ <?php echo $product['original_price']; ?></del>
+                                                <span class="text-blue-700 font-semibold ml-2">৳ <?php echo $product['price']; ?></span>
+                                            </p>
+                                        </div>
+                                        <div class="w-5 h-5 border-2 border-gray-300 rounded-full flex items-center justify-center ml-4 flex-shrink-0">
+                                            <span class="w-3 h-3 bg-blue-600 rounded-full hidden checkmark"></span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <style>
+                                    .product-option input:checked + label .checkmark { display: block; }
+                                </style>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
 
                         <!-- (ADDED) Payment Method Note -->
@@ -430,27 +455,27 @@ $products = [
                             <div class="pt-4 space-y-2 font-hind border-t border-gray-200">
                                 <div class="flex justify-between items-center text-gray-600">
                                     <span class="font-semibold">Subtotal</span>
-                                    <span id="subtotal-price" class="font-semibold">৳ <?php echo $products['100ml']['price']; ?></span>
+                                    <span id="subtotal-price" class="font-semibold">৳ <?php echo htmlspecialchars($first_product['price']); ?></span>
                                 </div>
                                  <div class="flex items-center justify-between text-gray-600">
                                     <label for="shipping-dhaka" class="flex items-center cursor-pointer font-semibold">
-                                        <input type="radio" id="shipping-dhaka" name="shipping_cost" value="60" class="h-4 w-4 text-blue-600 focus:ring-blue-500" checked>
+                                        <input type="radio" id="shipping-dhaka" name="shipping_cost" value="<?php echo htmlspecialchars($settings['shipping_dhaka']); ?>" class="h-4 w-4 text-blue-600 focus:ring-blue-500" checked>
                                         <span class="ml-2">ডেলিভারি চার্জ (ঢাকার মধ্যে)</span>
                                     </label>
-                                    <span class="font-semibold">৳ 60</span>
+                                    <span class="font-semibold">৳ <?php echo htmlspecialchars($settings['shipping_dhaka']); ?></span>
                                  </div>
                                  <div class="flex items-center justify-between text-gray-600">
                                     <label for="shipping-outside-dhaka" class="flex items-center cursor-pointer font-semibold">
-                                        <input type="radio" id="shipping-outside-dhaka" name="shipping_cost" value="100" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
+                                        <input type="radio" id="shipping-outside-dhaka" name="shipping_cost" value="<?php echo htmlspecialchars($settings['shipping_outside']); ?>" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
                                         <span class="ml-2">ডেলিভারি চার্জ (ঢাকার বাইরে)</span>
                                     </label>
-                                    <span class="font-semibold">৳ 100</span>
+                                    <span class="font-semibold">৳ <?php echo htmlspecialchars($settings['shipping_outside']); ?></span>
                                  </div>
                             </div>
                             <div class="border-t border-gray-200 pt-4"></div>
                             <div class="flex justify-between items-center pt-4 text-xl font-semibold text-gray-900 font-hind">
                                 <span class="font-semibold">সর্বমোট</span>
-                                <span id="total-price" class="text-blue-700 font-semibold">৳ <?php echo $products['100ml']['price'] + 60; ?></span>
+                                <span id="total-price" class="text-blue-700 font-semibold">৳ <?php echo htmlspecialchars($first_product['price'] + $settings['shipping_dhaka']); ?></span>
                             </div>
                         </div>
                         
@@ -477,7 +502,7 @@ $products = [
     </footer>
     
     <!-- (MODIFIED) Floating WhatsApp button -->
-    <a href="https://wa.me/8801234567890?text=I'm%20interested%20in%20the%20Hair%20Code" class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/8801234567890?text=I'm%20interested%in%20the%20Hair%20Code" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
     
@@ -520,6 +545,11 @@ $products = [
                 const selectedProduct = document.querySelector('input[name="product_option"]:checked');
                 const selectedShipping = document.querySelector('input[name="shipping_cost"]:checked');
                 
+                // Fallback in case no product is selected (e.g., if all are inactive)
+                if (!selectedProduct || !selectedShipping) {
+                    return;
+                }
+                
                 const productPrice = parseInt(selectedProduct.value, 10);
                 const shippingCost = parseInt(selectedShipping.value, 10);
                 const total = productPrice + shippingCost;
@@ -550,27 +580,32 @@ $products = [
             const submitButton = document.getElementById('submit-button');
             const buttonText = document.getElementById('button-text');
 
-            form.addEventListener('submit', function(e) {
-                // Stop the form from submitting immediately
-                e.preventDefault(); 
-                
-                // Disable the button to prevent multiple clicks
-                submitButton.disabled = true;
-                buttonText.textContent = 'Processing...';
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Stop the form from submitting immediately
+                    e.preventDefault(); 
+                    
+                    // Disable the button to prevent multiple clicks
+                    if(submitButton) {
+                        submitButton.disabled = true;
+                        buttonText.textContent = 'Processing...';
+                    }
 
-                grecaptcha.ready(function() {
-                    // Use the Site Key you provided
-                    grecaptcha.execute('6LfuyvorAAAAAOxCqbdvTG7SFuRT1RWh61zmvGm8', {action: 'submit_order'}).then(function(token) {
-                        // Add the token to the hidden field
-                        document.getElementById('recaptcha_token').value = token;
-                        
-                        // Now submit the form programmatically
-                        form.submit();
+                    grecaptcha.ready(function() {
+                        // Use the Site Key you provided
+                        grecaptcha.execute('6LfuyvorAAAAAOxCqbdvTG7SFuRT1RWh61zmvGm8', {action: 'submit_order'}).then(function(token) {
+                            // Add the token to the hidden field
+                            document.getElementById('recaptcha_token').value = token;
+                            
+                            // Now submit the form programmatically
+                            form.submit();
+                        });
                     });
                 });
-            });
+            }
 
         });
     </script>
 </body>
 </html>
+

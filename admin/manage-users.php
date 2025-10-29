@@ -35,6 +35,8 @@ $users = $pdo->query("SELECT id, username, role, created_at FROM users ORDER BY 
                         <a href="manage-reviews.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Reviews</a>
                     <?php endif; ?>
                     <?php if (is_superadmin()): ?>
+                        <a href="manage-products.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Manage Products</a>
+                        <a href="manage-settings.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
                         <a href="manage-users.php" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Manage Users</a>
                     <?php endif; ?>
                     <a href="logout.php" class="text-gray-500 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
