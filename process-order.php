@@ -1,6 +1,55 @@
 <?php
 // Start the session to manage redirects and error messages.
 session_start();
+
+// --- (ADDED) CSRF Token Check ---
+// Check if the token is set and matches the one in the session
+if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    $_SESSION['error_message'] = 'Invalid form submission. Please try again.';
+    // Regenerate token on failure
+    unset($_SESSION['csrf_token']); 
+    header('Location: index.php#order-form');
+    exit;
+}
+// --- End CSRF Check ---
+
+
+// --- (ADDED) Google reCAPTCHA v3 Check ---
+$recaptcha_token = $_POST['recaptcha_token'] ?? '';
+$recaptcha_secret = '6LfuyvorAAAAAM_zgaDHqqIUviRGEoUHBA2MaYyH'; // Your Secret Key
+
+if (empty($recaptcha_token)) {
+    $_SESSION['error_message'] = 'Bot verification failed. Please try again.';
+    header('Location: index.php#order-form');
+    exit;
+}
+
+$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+$recaptcha_response = @file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_token);
+
+if ($recaptcha_response === FALSE) {
+    // Handle error if file_get_contents fails (e.g., server firewall)
+    $_SESSION['error_message'] = 'Could not verify submission. Please check server settings.';
+    header('Location: index.php#order-form');
+    exit;
+}
+
+$recaptcha_data = json_decode($recaptcha_response);
+
+// Check if verification was successful and the score is above our threshold (e.g., 0.5)
+if (!$recaptcha_data || !$recaptcha_data->success || $recaptcha_data->score < 0.5) {
+    // Score is too low (likely a bot) or verification failed
+    $_SESSION['error_message'] = 'Bot verification failed. Please try again.';
+    // You might want to log this for debugging:
+    // error_log('reCAPTCHA failed. Score: ' . ($recaptcha_data->score ?? 'N/A') . ' Action: ' . ($recaptcha_data->action ?? 'N/A'));
+    header('Location: index.php#order-form');
+    exit;
+}
+// --- End reCAPTCHA Check ---
+
+
+// --- All Checks Passed, Proceed with Order Processing ---
+
 require_once 'db-config.php';
 
 // --- Security: Only allow POST requests ---
@@ -105,6 +154,8 @@ try {
 
 // --- Redirect to Thank You Page on Success ---
 if ($last_insert_id > 0) {
+    // (MODIFIED) Clear the CSRF token on success to prevent re-submission
+    unset($_SESSION['csrf_token']);
     $_SESSION['last_order_id'] = $last_insert_id;
     header('Location: thank-you.php');
     exit;

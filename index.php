@@ -2,6 +2,13 @@
 session_start();
 require_once 'db-config.php';
 
+// --- (MODIFIED) Generate CSRF Token ---
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrf_token = $_SESSION['csrf_token'];
+// --- End CSRF Token ---
+
 // This code retrieves any error messages from the session to display them.
 $error_message = $_SESSION['error_message'] ?? null;
 unset($_SESSION['error_message']); // Clear the message after displaying it once.
@@ -57,6 +64,10 @@ $products = [
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- SwiperJS for Image Slider --><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- (ADDED) Google reCAPTCHA v3 Script -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfuyvorAAAAAOxCqbdvTG7SFuRT1RWh61zmvGm8"></script>
+
     <style>
         body {
             font-family: 'Hind Siliguri', 'Anek Bangla', sans-serif;
@@ -140,6 +151,11 @@ $products = [
          .product-option label {
              transition: all 0.2s ease-in-out;
          }
+
+        /* (ADDED) Hide reCAPTCHA Badge */
+        .grecaptcha-badge { 
+            visibility: hidden; 
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -339,6 +355,11 @@ $products = [
                  <?php endif; ?>
 
                 <form id="billing-form" action="process-order.php" method="POST" class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    
+                    <!-- (ADDED) Security Fields -->
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+                    <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+
                     <!-- Hidden inputs for selected product details -->
                     <input type="hidden" id="selected_product_name" name="selected_product_name" value="<?php echo htmlspecialchars($products['100ml']['name']); ?>">
                     <input type="hidden" id="selected_product_price" name="selected_product_price" value="<?php echo htmlspecialchars($products['100ml']['price']); ?>">
@@ -423,6 +444,14 @@ $products = [
                         <button type="submit" id="submit-button" class="cta-button w-full bg-blue-700 text-white font-bold py-4 px-6 rounded-lg mt-8 text-xl flex items-center justify-center shadow-lg hover:bg-blue-800 font-anek h-[60px]">
                             <span id="button-text">অর্ডার কনফার্ম করুন</span>
                         </button>
+                        
+                        <!-- (ADDED) reCAPTCHA Compliance Text -->
+                        <div class="text-xs text-center text-gray-500 mt-4 font-hind">
+                            This site is protected by reCAPTCHA and the Google
+                            <a href="https://policies.google.com/privacy" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and
+                            <a href="https://policies.google.com/terms" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Terms of Service</a> apply.
+                        </div>
+
                     </div>
                 </form>
             </div>
@@ -434,10 +463,9 @@ $products = [
         <p>&copy; <?php echo date("Y"); ?> Hair Code. All Rights Reserved.</p>
     </footer>
     
-    <!-- Floating WhatsApp button --><a href="https://wa.me/8801234567890?text=I'm%20interested%20in%20the%20Hair%20Code" class="whatsapp-float" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
-        </svg>
+    <!-- (MODIFIED) Floating WhatsApp button -->
+    <a href="https://wa.me/8801234567890?text=I'm%20interested%20in%20the%20Hair%20Code" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
     </a>
     
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -503,8 +531,35 @@ $products = [
             shippingOptions.forEach(option => {
                 option.addEventListener('change', updateTotalPrice);
             });
+
+            // --- (ADDED) reCAPTCHA v3 and Form Submission Handling ---
+            const form = document.getElementById('billing-form');
+            const submitButton = document.getElementById('submit-button');
+            const buttonText = document.getElementById('button-text');
+
+            form.addEventListener('submit', function(e) {
+                // Stop the form from submitting immediately
+                e.preventDefault(); 
+                
+                // Disable the button to prevent multiple clicks
+                submitButton.disabled = true;
+                buttonText.textContent = 'Processing...';
+
+                grecaptcha.ready(function() {
+                    // Use the Site Key you provided
+                    grecaptcha.execute('6LfuyvorAAAAAOxCqbdvTG7SFuRT1RWh61zmvGm8', {action: 'submit_order'}).then(function(token) {
+                        // Add the token to the hidden field
+                        document.getElementById('recaptcha_token').value = token;
+                        
+                        // Now submit the form programmatically
+                        form.submit();
+                    });
+                });
+            });
+
         });
     </script>
 </body>
 </html>
+
 
